@@ -1,0 +1,70 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Customer Churn Dashboard</title><style>
+:root{--bg:#0f1420;--card:#171e2e;--ink:#e8ecf5;--mute:#8a94ab;--line:#26304a;--a:#6ea8ff;--b:#35d0a0;--c:#ffb454;--d:#ff6b81;--r:14px}
+@media (prefers-color-scheme:light){:root{--bg:#f2f5fb;--card:#fff;--ink:#16203a;--mute:#66708a;--line:#e1e6f2;--a:#2f6fe4;--b:#0f9d76;--c:#d98a1f;--d:#e0354f}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Segoe UI",system-ui,-apple-system,Arial,sans-serif}
+header{padding:28px 32px 8px}h1{margin:0;font-size:26px}header p{margin:4px 0 0;color:var(--mute)}
+main{padding:16px 32px 40px;display:grid;gap:18px;grid-template-columns:repeat(12,1fr)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;min-width:0}
+.card h2{margin:0 0 12px;font-size:15px;color:var(--mute);font-weight:600;letter-spacing:.03em;text-transform:uppercase}
+.kpi{grid-column:span 3}.kpi .v{font-size:32px;font-weight:700}.kpi .s{color:var(--mute);font-size:13px}
+.w4{grid-column:span 4}.w5{grid-column:span 5}.w6{grid-column:span 6}.w7{grid-column:span 7}.w8{grid-column:span 8}.w12{grid-column:span 12}
+@media(max-width:1000px){.kpi{grid-column:span 6}.w4,.w5,.w6,.w7,.w8{grid-column:span 12}}
+.row{display:grid;grid-template-columns:150px 1fr 54px;gap:10px;align-items:center;margin:7px 0;font-size:13px}
+.track{background:var(--line);border-radius:8px;height:10px;overflow:hidden}.fill{height:100%;border-radius:8px}
+.best{color:var(--b);font-weight:700}.legend{display:flex;gap:16px;font-size:12px;color:var(--mute);margin-bottom:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px}
+.cm{display:grid;grid-template-columns:auto 1fr 1fr;gap:6px;text-align:center;font-size:13px}.cm div{padding:16px 6px;border-radius:10px}
+.cm .h{color:var(--mute);padding:6px}.ok{background:color-mix(in srgb,var(--b) 25%,transparent)}.bad{background:color-mix(in srgb,var(--d) 22%,transparent)}.cm b{display:block;font-size:24px}
+table{width:100%;border-collapse:collapse;font-size:14px}th{color:var(--mute);text-align:left;font-weight:600;padding:8px;border-bottom:1px solid var(--line)}td{padding:9px 8px;border-bottom:1px solid var(--line)}
+.pill{padding:2px 10px;border-radius:99px;background:color-mix(in srgb,var(--d) 22%,transparent);color:var(--d);font-weight:600}
+.note{color:var(--mute);font-size:12.5px;margin-top:10px}
+</style></head><body>
+<header><h1>Customer Churn Prediction Dashboard</h1><p id="sub"></p></header>
+<main id="m"></main>
+<script>
+const D={"best": "logistic_regression", "threshold": 0.526, "cutoff": "2011-09-09", "window": 90, "kpi": {"customers": 5253, "churn_rate": 0.5663430420711975, "revenue_at_risk": 1571103.55, "auc": 0.7821244066818767, "accuracy": 0.7182741116751269, "precision": 0.7786069651741293, "recall": 0.7017937219730942, "f1": 0.7382075471698113}, "models": [{"name": "logistic_regression", "cv": 0.7962859822337724, "val": 0.8175858180578501, "test": 0.7821244066818767, "recall": 0.7017937219730942, "precision": 0.7786069651741293}, {"name": "random_forest", "cv": 0.8076651805117049, "val": 0.8154551176146645, "test": 0.7888770880864344, "recall": 0.7174887892376681, "precision": 0.7766990291262136}, {"name": "knn", "cv": 0.7874990457652304, "val": 0.8119378228830672, "test": 0.7712676684236751, "recall": 0.7443946188340808, "precision": 0.751131221719457}, {"name": "xgboost", "cv": 0.7968300799437614, "val": 0.8027299189678232, "test": 0.7791283140586893, "recall": 0.6883408071748879, "precision": 0.7617866004962779}, {"name": "lightgbm", "cv": 0.796038136959528, "val": 0.7978325859491779, "test": 0.779672462171872, "recall": 0.7062780269058296, "precision": 0.7572115384615384}, {"name": "decision_tree", "cv": 0.7786779916644779, "val": 0.7974195578632681, "test": 0.78549091338211, "recall": 0.7825112107623319, "precision": 0.7687224669603524}], "roc": {"fpr": [0.0, 0.0, 0.0029, 0.0117, 0.0175, 0.0205, 0.0234, 0.0263, 0.0292, 0.0322, 0.038, 0.0409, 0.0439, 0.0468, 0.0526, 0.0556, 0.0585, 0.0643, 0.0702, 0.0731, 0.0819, 0.0848, 0.0877, 0.0906, 0.0936, 0.0965, 0.1023, 0.117, 0.1199, 0.1228, 0.1257, 0.1287, 0.1316, 0.1345, 0.1374, 0.1404, 0.1433, 0.1462, 0.1491, 0.152, 0.155, 0.1579, 0.1637, 0.1725, 0.1754, 0.1842, 0.1871, 0.1901, 0.1959, 0.1988, 0.2047, 0.2076, 0.2135, 0.2193, 0.2222, 0.2281, 0.231, 0.2339, 0.2368, 0.2398, 0.2427, 0.2456, 0.2515, 0.2602, 0.2749, 0.2807, 0.2836, 0.2953, 0.3012, 0.3041, 0.3099, 0.3158, 0.3275, 0.3304, 0.3333, 0.3392, 0.3421, 0.345, 0.3538, 0.3567, 0.3626, 0.3684, 0.3713, 0.3772, 0.386, 0.3889, 0.3977, 0.4006, 0.4094, 0.4123, 0.4152, 0.424, 0.4269, 0.4357, 0.4386, 0.4503, 0.4532, 0.4561, 0.4591, 0.4737, 0.4766, 0.4912, 0.5058, 0.5146, 0.5175, 0.5234, 0.5351, 0.5468, 0.5497, 0.5614, 0.576, 0.5819, 0.5994, 0.6111, 0.6374, 0.6491, 0.6637, 0.6667, 0.6754, 0.6813, 0.6871, 0.7076, 0.7281, 0.7339, 0.7544, 0.7632, 0.7982, 0.8099, 0.8129, 0.848, 0.8567, 0.8713, 0.9854], "tpr": [0.0, 0.0157, 0.0202, 0.0314, 0.0493, 0.0673, 0.1031, 0.148, 0.1637, 0.1704, 0.1928, 0.204, 0.2197, 0.222, 0.2242, 0.2377, 0.2444, 0.2646, 0.2735, 0.278, 0.2803, 0.2892, 0.3117, 0.3161, 0.3386, 0.3453, 0.3498, 0.3587, 0.3677, 0.3744, 0.3901, 0.4058, 0.417, 0.435, 0.4417, 0.4439, 0.4462, 0.4484, 0.4529, 0.4574, 0.4596, 0.4686, 0.4709, 0.4821, 0.509, 0.5381, 0.5493, 0.5583, 0.565, 0.5717, 0.574, 0.5807, 0.583, 0.6076, 0.6211, 0.6233, 0.6256, 0.6368, 0.639, 0.6435, 0.6525, 0.6547, 0.6973, 0.7085, 0.7354, 0.7399, 0.7534, 0.7578, 0.7623, 0.7646, 0.7735, 0.7758, 0.7803, 0.7825, 0.7848, 0.787, 0.796, 0.7982, 0.8027, 0.8072, 0.8139, 0.8161, 0.8206, 0.8274, 0.8296, 0.8386, 0.8408, 0.8453, 0.8475, 0.8543, 0.8565, 0.8677, 0.87, 0.8744, 0.8767, 0.8789, 0.8834, 0.8857, 0.8879, 0.8901, 0.8946, 0.8969, 0.9013, 0.9036, 0.9081, 0.9103, 0.9148, 0.9215, 0.9283, 0.9305, 0.9327, 0.935, 0.9372, 0.9395, 0.9417, 0.9462, 0.9507, 0.9529, 0.9619, 0.9641, 0.9664, 0.9686, 0.9709, 0.9731, 0.9821, 0.9843, 0.9865, 0.9888, 0.991, 0.9933, 0.9955, 0.9978, 1.0]}, "cm": {"tn": 253, "fp": 89, "fn": 133, "tp": 313}, "importance": [{"name": "Engagement score", "value": 0.17637217108541164}, {"name": "Customer age (days)", "value": 0.00424435528282594}, {"name": "Days since last order", "value": 0.0042338656806441225}, {"name": "Product variety", "value": 0.0032203078698241016}, {"name": "Category: Kitchen Dining", "value": 0.002764010174914233}, {"name": "Category: Stationery Party", "value": 0.0013806938871844033}, {"name": "Discount sensitivity", "value": 0.0009204625914563058}, {"name": "Returned items", "value": 0.0004785880995463954}], "risk": {"High": 2633, "Medium": 1130, "Low": 1490}, "top": [{"id": 15098, "p": 0.9451364906074036, "value": 39619.5, "recency": 90.35208333333334, "orders": 3}, {"id": 13902, "p": 0.6601462469591838, "value": 30375.26, "recency": 540.4520833333333, "orders": 5}, {"id": 18251, "p": 0.5884813072957583, "value": 21964.14, "recency": 353.4402777777778, "orders": 8}, {"id": 15749, "p": 0.9849431274920153, "value": 21535.9, "recency": 143.44444444444446, "orders": 3}, {"id": 13687, "p": 0.8634472541361105, "value": 11880.84, "recency": 346.3125, "orders": 1}, {"id": 12357, "p": 0.977176408109747, "value": 11229.99, "recency": 296.5798611111111, "orders": 1}, {"id": 18052, "p": 0.9915688779590586, "value": 10877.18, "recency": 472.5340277777778, "orders": 1}, {"id": 14091, "p": 0.9403320737409523, "value": 9530.08, "recency": 562.3631944444444, "orders": 2}, {"id": 14063, "p": 0.7355343234151976, "value": 9471.5, "recency": 594.5222222222222, "orders": 7}, {"id": 14439, "p": 0.5458414006886779, "value": 9443.04, "recency": 227.5145833333333, "orders": 5}, {"id": 12590, "p": 0.9433402638045146, "value": 9330.48, "recency": 119.38472222222222, "orders": 1}, {"id": 14160, "p": 0.6353330539956453, "value": 8421.47, "recency": 518.3958333333334, "orders": 7}]}, $=s=>document.querySelector(s), pct=v=>(v*100).toFixed(1)+'%', money=v=>'£'+Math.round(v).toLocaleString();
+const nice=n=>n.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+$('#sub').textContent=`Will a customer stay silent for ${D.window} days after ${D.cutoff}? Best model: ${nice(D.best)} · decision threshold ${D.threshold}`;
+const card=(cls,title,body)=>`<section class="card ${cls}"><h2>${title}</h2>${body}</section>`;
+const kpi=(t,v,s,c)=>card('kpi',t,`<div class="v" style="color:var(--${c})">${v}</div><div class="s">${s}</div>`);
+const bar=(label,v,max,col,txt)=>`<div class="row"><span>${label}</span><div class="track"><div class="fill" style="width:${Math.max(v/max*100,1)}%;background:var(--${col})"></div></div><span>${txt}</span></div>`;
+let h='';
+h+=kpi('Customers analysed',D.kpi.customers.toLocaleString(),`${pct(D.kpi.churn_rate)} churned in the window`,'a');
+h+=kpi('Test ROC-AUC',D.kpi.auc.toFixed(3),'ranking quality on unseen customers','b');
+h+=kpi('Churners caught (recall)',pct(D.kpi.recall),`precision ${pct(D.kpi.precision)} · accuracy ${pct(D.kpi.accuracy)} · F1 ${D.kpi.f1.toFixed(2)}`,'c');
+h+=kpi('Revenue at risk',money(D.kpi.revenue_at_risk),'past spend of customers flagged high-risk','d');
+// model comparison
+const mx=Math.max(...D.models.map(m=>Math.max(m.val,m.test)),.01);
+h+=card('w6','Model comparison (ROC-AUC)',`<div class="legend"><span><i style="background:var(--a)"></i>Validation</span><span><i style="background:var(--b)"></i>Test</span></div>`+
+ D.models.map(m=>`<div style="margin-bottom:6px"><div class="${m.name==D.best?'best':''}" style="font-size:13px">${nice(m.name)}${m.name==D.best?' ★ selected':''}</div>`+bar('Validation',m.val-.5,mx-.5,'a',m.val.toFixed(3))+bar('Test',m.test-.5,mx-.5,'b',m.test.toFixed(3))+`</div>`).join('')+
+ `<div class="note">Bars start at 0.5 (random guessing). The model is selected on validation AUC, never on test.</div>`);
+// ROC
+const W=300,H=240,P=30,x=v=>P+v*(W-P-8),y=v=>H-P-v*(H-P-8);
+const pts=D.roc.fpr.map((f,i)=>`${x(f)},${y(D.roc.tpr[i])}`).join(' ');
+h+=card('w6','ROC curve (best model, test set)',`<svg viewBox="0 0 ${W} ${H}" width="100%" style="max-height:290px">
+ <line x1="${P}" y1="${y(0)}" x2="${x(1)}" y2="${y(0)}" stroke="var(--line)"/><line x1="${P}" y1="${y(0)}" x2="${P}" y2="${y(1)}" stroke="var(--line)"/>
+ <line x1="${x(0)}" y1="${y(0)}" x2="${x(1)}" y2="${y(1)}" stroke="var(--mute)" stroke-dasharray="4 4"/>
+ <polygon points="${x(0)},${y(0)} ${pts} ${x(1)},${y(0)}" fill="var(--a)" opacity=".16"/><polyline points="${pts}" fill="none" stroke="var(--a)" stroke-width="2.5"/>
+ <text x="${W/2}" y="${H-6}" fill="var(--mute)" font-size="10" text-anchor="middle">False positive rate</text>
+ <text x="10" y="${H/2}" fill="var(--mute)" font-size="10" transform="rotate(-90 10 ${H/2})" text-anchor="middle">True positive rate</text>
+ <text x="${x(.55)}" y="${y(.3)}" fill="var(--a)" font-size="14" font-weight="700">AUC ${D.kpi.auc.toFixed(3)}</text></svg>`);
+// importance
+const im=Math.max(...D.importance.map(i=>i.value),1e-6);
+h+=card('w4','What drives churn (permutation importance)',D.importance.map(i=>bar(i.name,Math.max(i.value,0),im,'c',i.value.toFixed(3))).join('')+`<div class="note">Drop in test AUC when that feature is shuffled; bigger = more important.</div>`);
+// donut
+const tot=Object.values(D.risk).reduce((a,b)=>a+b,0),cols={High:'d',Medium:'c',Low:'b'};let off=0;
+const arcs=['High','Medium','Low'].map(k=>{const f=D.risk[k]/tot,a=`<circle r="15.9" cx="21" cy="21" fill="none" stroke="var(--${cols[k]})" stroke-width="6" stroke-dasharray="${f*100} ${100-f*100}" stroke-dashoffset="${-off*100}" transform="rotate(-90 21 21)"/>`;off+=f;return a}).join('');
+h+=card('w4','Customer risk segments',`<svg viewBox="0 0 42 42" width="170" style="display:block;margin:0 auto">${arcs}<text x="21" y="22" text-anchor="middle" font-size="6" font-weight="700" fill="var(--ink)">${tot.toLocaleString()}</text><text x="21" y="27" text-anchor="middle" font-size="3" fill="var(--mute)">customers</text></svg>`+
+ ['High','Medium','Low'].map(k=>`<div class="row" style="grid-template-columns:90px 1fr 80px"><span><i style="display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--${cols[k]});margin-right:6px"></i>${k}</span><span></span><span>${D.risk[k].toLocaleString()} (${pct(D.risk[k]/tot)})</span></div>`).join(''));
+// confusion matrix
+const c=D.cm;
+h+=card('w4','Confusion matrix (test)',`<div class="cm"><div class="h"></div><div class="h">Pred: stays</div><div class="h">Pred: churns</div>
+ <div class="h">Actual: stays</div><div class="ok"><b>${c.tn}</b>correct</div><div class="bad"><b>${c.fp}</b>wasted offer</div>
+ <div class="h">Actual: churns</div><div class="bad"><b>${c.fn}</b>missed churner</div><div class="ok"><b>${c.tp}</b>caught</div></div>`);
+// top table
+h+=card('w12','Highest-value customers to save first (flagged high-risk)',`<table><tr><th>Customer ID</th><th>Churn probability</th><th>Past net spend</th><th>Days since last order</th><th>Orders</th></tr>`+
+ D.top.map(t=>`<tr><td>${t.id}</td><td><span class="pill">${pct(t.p)}</span></td><td>${money(t.value)}</td><td>${Math.round(t.recency)}</td><td>${t.orders}</td></tr>`).join('')+`</table><div class="note">Scores are produced for all customers, including those the model trained on, so use this list for prioritisation, not for evaluation.</div>`);
+$('#m').innerHTML=h;
+</script></body></html>

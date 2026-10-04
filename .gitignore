@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.venv/
+data/raw/*
+data/interim/*
+data/processed/*
+models_artifacts/*
+!**/.gitkeep

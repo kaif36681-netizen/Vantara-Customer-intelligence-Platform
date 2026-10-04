@@ -1,0 +1,36 @@
+seed: 42
+paths:
+  raw: data/raw/online_retail_II.xlsx
+  interim: data/interim/transactions_clean.csv
+  processed: data/processed/customer_features.csv
+  artifacts: models_artifacts
+data:
+  sheets: ["Year 2009-2010", "Year 2010-2011"]
+  drop_exact_duplicates: true
+  non_product_codes: [POST, D, M, C2, BANK CHARGES, PADS, DOT, CRUK, AMAZONFEE, ADJUST, ADJUST2, S, B]
+  non_product_prefixes: ["GIFT_", "TEST"]
+  iqr_factor: 3.0
+validation:
+  max_null_rate_customer_id: 0.35
+  max_null_rate_core_fields: 0.001
+  expected_date_range: ["2009-12-01", "2011-12-10"]
+churn:
+  cutoff_date: "2011-09-09"
+  window_days: 90
+  clv_horizon_days: 90
+features:
+  trend_lookback_bins: 12
+  trend_bin_days: 30
+  discount_threshold: 0.90
+  category_keywords:
+    christmas_gifts: [CHRISTMAS, XMAS, SANTA, ADVENT, GIFT, WRAP, TREE]
+    kitchen_dining: [MUG, CUP, TEA, PLATE, BOWL, JAR, CAKE, KITCHEN, SPOON, CUTLERY, BAKING, LUNCH]
+    home_decor: [CANDLE, LANTERN, FRAME, CUSHION, DOORMAT, SIGN, HEART, VINTAGE, CLOCK, MIRROR, LIGHT]
+    stationery_party: [CARD, PAPER, NOTEBOOK, PENCIL, PARTY, BALLOON, RIBBON, STICKER, BUNTING]
+    bags_accessories: [BAG, PURSE, WALLET, UMBRELLA, KEYRING]
+    toys_kids: [TOY, DOLL, GAME, CHILDREN, KIDS, PLAYHOUSE, PUZZLE]
+split: {train: 0.70, val: 0.15, test: 0.15}
+modeling:
+  cv_folds: 5
+  min_recall_target: 0.70
+  rf_search_iterations: 8
